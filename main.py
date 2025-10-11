@@ -95,41 +95,54 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     false
     )
 })
-function loadTutorial () {
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile24`, function (sprite, location) {
     tiles.setCurrentTilemap(tilemap`level3`)
-    tiles.placeOnTile(mySprite, tiles.getTileLocation(4, 4))
+    mySprite = sprites.create(img`
+        . . . . . f f 4 4 f f . . . . . 
+        . . . . f 5 4 5 5 4 5 f . . . . 
+        . . . f e 4 5 5 5 5 4 e f . . . 
+        . . f b 3 e 4 4 4 4 e 3 b f . . 
+        . . f 3 3 3 3 3 3 3 3 3 3 f . . 
+        . f 3 3 e b 3 e e 3 b e 3 3 f . 
+        . f 3 3 f f e e e e f f 3 3 f . 
+        . f b b f b f e e f b f b b f . 
+        . f b b e 1 f 4 4 f 1 e b b f . 
+        f f b b f 4 4 4 4 4 4 f b b f f 
+        f b b f f f e e e e f f f b b f 
+        . f e e f b d d d d b f e e f . 
+        . . e 4 c d d d d d d c 4 e . . 
+        . . e f b d b d b d b b f e . . 
+        . . . f f 1 d 1 d 1 d f f . . . 
+        . . . . . f f b b f f . . . . . 
+        `, SpriteKind.Player)
     controller.moveSprite(mySprite)
     mySprite.sayText("press a to atak")
     scene.cameraFollowSprite(mySprite)
     for (let index = 0; index < 8; index++) {
-        mySprite3 = sprites.create(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . e e e e e e e e . . . . 
-            . . . e e 2 2 2 2 2 2 e e . . . 
-            . . e e 2 2 1 1 1 1 2 2 e e . . 
-            . . e 2 2 1 1 1 1 1 1 2 2 e . . 
-            . . e 2 1 1 1 2 2 1 1 1 2 e . . 
-            . . e 2 1 1 2 2 2 2 1 1 2 e . . 
-            . . e 2 1 1 2 2 2 2 1 1 2 e . . 
-            . . e 2 1 1 1 2 2 1 1 1 2 e . . 
-            . . e 2 2 1 1 1 1 1 1 2 2 e . . 
-            . . e e 2 2 1 1 1 1 2 2 e e . . 
-            . . . e e 2 2 2 2 2 2 e e . . . 
-            . . . . e e e e e e e e . . . . 
-            . . . . . . . e e . . . . . . . 
-            . . . . . . . e e . . . . . . . 
-            . . . . . . . e e . . . . . . . 
-            `, SpriteKind.Food)
-        tiles.placeOnRandomTile(mySprite3, assets.tile`myTile26`)
-        myEnemyHealth = 5
+    	
     }
-}
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile24`, function (sprite, location) {
-    loadTutorial()
+    mySprite2 = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . e e e e e e e e . . . . 
+        . . . e e 2 2 2 2 2 2 e e . . . 
+        . . e e 2 2 1 1 1 1 2 2 e e . . 
+        . . e 2 2 1 1 1 1 1 1 2 2 e . . 
+        . . e 2 1 1 1 2 2 1 1 1 2 e . . 
+        . . e 2 1 1 2 2 2 2 1 1 2 e . . 
+        . . e 2 1 1 2 2 2 2 1 1 2 e . . 
+        . . e 2 1 1 1 2 2 1 1 1 2 e . . 
+        . . e 2 2 1 1 1 1 1 1 2 2 e . . 
+        . . e e 2 2 1 1 1 1 2 2 e e . . 
+        . . . e e 2 2 2 2 2 2 e e . . . 
+        . . . . e e e e e e e e . . . . 
+        . . . . . . . e e . . . . . . . 
+        . . . . . . . e e . . . . . . . 
+        . . . . . . . e e . . . . . . . 
+        `, SpriteKind.Food)
+    tiles.placeOnRandomTile(mySprite2, assets.tile`myTile26`)
+    mySprite2 = 5
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    attacking = true
-    myEnemyHealth = -5
     animation.runImageAnimation(
     mySprite,
     [img`
@@ -392,12 +405,6 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile16`, function (sprite, 
     controller.moveSprite(mySprite)
     scene.cameraFollowSprite(mySprite)
 })
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile40`, function (sprite, location) {
-    sprites.destroyAllSpritesOfKind(SpriteKind.Food)
-    tiles.setCurrentTilemap(tilemap`level2`)
-    tiles.placeOnTile(mySprite, tiles.getTileLocation(22, 6))
-    info.setLife(5)
-})
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
     mySprite,
@@ -550,13 +557,6 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     false
     )
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
-    if (attacking) {
-        sprites.destroy(otherSprite)
-        myEnemyHealth = -5
-        attacking = false
-    }
-})
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile35`, function (sprite, location) {
     blackBareyCounter = 0
     for (let value of list) {
@@ -572,9 +572,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile35`, function (sprite, 
     }
 })
 let blackBareyCounter = 0
-let myEnemyHealth = 0
-let mySprite3: Sprite = null
-let attacking = false
+let mySprite2 = 0
 let list: string[] = []
 let mySprite: Sprite = null
 tiles.setCurrentTilemap(tilemap`level1`)
@@ -599,5 +597,3 @@ mySprite = sprites.create(img`
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
 list = []
-attacking = false
-loadTutorial()
