@@ -627,4 +627,3 @@ scene.cameraFollowSprite(mySprite)
 list = []
 attacking = false
 blackBareyCounter = 0
-loadTutorial()
