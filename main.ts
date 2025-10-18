@@ -391,6 +391,28 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile16`, function (sprite, 
     info.setLife(5)
     controller.moveSprite(mySprite)
     scene.cameraFollowSprite(mySprite)
+    for (let index = 0; index < 13; index++) {
+        mySprite2 = sprites.create(img`
+            . . 7 . . . . . . . . . 7 . . . 
+            . 7 3 7 . . . . . . . 7 3 7 . . 
+            7 3 3 7 . . . . . . . 7 3 3 7 . 
+            . 7 7 7 7 7 7 7 7 7 7 7 7 7 . . 
+            . . . 7 7 7 7 7 7 7 7 7 . . . . 
+            . . . 7 7 f 7 7 7 f 7 7 . . . . 
+            . . . 7 7 7 7 7 7 7 7 7 . . . . 
+            . . . 7 7 7 7 7 7 7 7 7 . . . . 
+            . . . . . . 7 7 7 . . . . . . . 
+            . . . e e e e e e e e e . . . . 
+            . . e e e e e e e e e e e . . . 
+            . e e e e e e e e e e e e e . . 
+            e e e e e e e e e e e e e e e . 
+            e e e . e e e e e e e . e e e . 
+            . . . . 7 7 . . . 7 7 . . . . . 
+            . . . . 7 7 . . . 7 7 . . . . . 
+            `, SpriteKind.Enemy)
+        tiles.placeOnRandomTile(mySprite2, assets.tile`myTile38`)
+    }
+    mySprite2.follow(mySprite)
 })
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile40`, function (sprite, location) {
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
@@ -558,7 +580,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     }
 })
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile35`, function (sprite, location) {
-    blackBareyCounter = 0
     for (let value of list) {
         if (value == "blackBarey") {
             blackBareyCounter += 1
@@ -571,9 +592,14 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile35`, function (sprite, 
         scene.cameraFollowSprite(mySprite)
     }
 })
-let blackBareyCounter = 0
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+    sprites.destroy(mySprite2)
+})
+let mySprite2: Sprite = null
 let myEnemyHealth = 0
 let mySprite3: Sprite = null
+let blackBareyCounter = 0
 let attacking = false
 let list: string[] = []
 let mySprite: Sprite = null
@@ -600,4 +626,5 @@ controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
 list = []
 attacking = false
+blackBareyCounter = 0
 loadTutorial()
