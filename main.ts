@@ -121,7 +121,6 @@ function loadTutorial () {
             . . . . . . . e e . . . . . . . 
             `, SpriteKind.Food)
         tiles.placeOnRandomTile(mySprite3, assets.tile`myTile26`)
-        myEnemyHealth = 5
     }
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile24`, function (sprite, location) {
@@ -129,7 +128,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile24`, function (sprite, 
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     attacking = true
-    myEnemyHealth = -5
+    myEnemyHealth += -5
     animation.runImageAnimation(
     mySprite,
     [img`
@@ -388,9 +387,12 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile16`, function (sprite, location) {
     tiles.setCurrentTilemap(tilemap`level2`)
     tiles.placeOnTile(mySprite, tiles.getTileLocation(4, 4))
+})
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile40`, function (sprite, location) {
+    sprites.destroyAllSpritesOfKind(SpriteKind.Food)
+    tiles.setCurrentTilemap(tilemap`level2`)
+    tiles.placeOnTile(mySprite, tiles.getTileLocation(22, 6))
     info.setLife(5)
-    controller.moveSprite(mySprite)
-    scene.cameraFollowSprite(mySprite)
     for (let index = 0; index < 13; index++) {
         mySprite2 = sprites.create(img`
             . . 7 . . . . . . . . . 7 . . . 
@@ -411,14 +413,9 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile16`, function (sprite, 
             . . . . 7 7 . . . 7 7 . . . . . 
             `, SpriteKind.Enemy)
         tiles.placeOnRandomTile(mySprite2, assets.tile`myTile38`)
+        mySprite2.follow(mySprite, 30)
+        myEnemyHealth = 10
     }
-    mySprite2.follow(mySprite)
-})
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile40`, function (sprite, location) {
-    sprites.destroyAllSpritesOfKind(SpriteKind.Food)
-    tiles.setCurrentTilemap(tilemap`level2`)
-    tiles.placeOnTile(mySprite, tiles.getTileLocation(22, 6))
-    info.setLife(5)
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
@@ -575,26 +572,35 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     if (attacking) {
         sprites.destroy(otherSprite)
-        myEnemyHealth = -5
         attacking = false
     }
+})
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile69`, function (sprite, location) {
+    game.splash("be wear of the wich")
 })
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile35`, function (sprite, location) {
     for (let value of list) {
         if (value == "blackBarey") {
             blackBareyCounter += 1
-            game.splash("if you get me 13 black bareys I will take you to the village")
         }
     }
-    if (blackBareyCounter == 13) {
+    if (blackBareyCounter >= 13) {
         tiles.setCurrentTilemap(tilemap`level4`)
+        tiles.placeOnTile(mySprite, tiles.getTileLocation(8, 14))
         controller.moveSprite(mySprite)
         scene.cameraFollowSprite(mySprite)
+    } else {
+        game.splash("if you get me 13 black bareys I will take you to the village")
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    info.changeLifeBy(-1)
-    sprites.destroy(mySprite2)
+    if (attacking) {
+        sprites.destroy(otherSprite)
+        attacking = false
+    } else {
+        info.changeLifeBy(-1)
+        sprites.destroy(otherSprite)
+    }
 })
 let mySprite2: Sprite = null
 let myEnemyHealth = 0
